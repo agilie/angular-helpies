@@ -8,6 +8,7 @@ VERSION="${VERSION:-minor}" # defaults to minor
 npm version $VERSION
 
 # Running tests and building the project
+ng lint
 ng test --no-watch --code-coverage
 ng build
 
