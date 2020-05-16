@@ -16,7 +16,7 @@ ng build
 curl -s https://codecov.io/bash | bash -s -- -t f27c863b-d1a1-4e34-a7cf-5c4559de19f3
 
 # Publishing the project from dist folder
-copy package.json dist
+cp package.json dist
 cd dist
 npm publish --access public
 
