@@ -8,5 +8,4 @@ This repository contains different instances that could be use in Angular projec
 
 ### TODOS
 1. Provide incode documentation (i.e. jsdoc)
-2. Provide code coverage and github badge
-3. Provide wiki
+2. Provide wiki
