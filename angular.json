@@ -37,6 +37,41 @@
           }
         }
       }
+    },
+    "decorators": {
+      "projectType": "library",
+      "root": "projects/decorators",
+      "sourceRoot": "projects/decorators/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/decorators/tsconfig.lib.json",
+            "project": "projects/decorators/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/decorators/src/test.ts",
+            "tsConfig": "projects/decorators/tsconfig.spec.json",
+            "karmaConfig": "projects/decorators/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/decorators/tsconfig.lib.json",
+              "projects/decorators/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "interceptors"
 }
