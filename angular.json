@@ -2,5 +2,41 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
-  "projects": {}
+  "projects": {
+    "interceptors": {
+      "projectType": "library",
+      "root": "projects/interceptors",
+      "sourceRoot": "projects/interceptors/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/interceptors/tsconfig.lib.json",
+            "project": "projects/interceptors/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/interceptors/src/test.ts",
+            "tsConfig": "projects/interceptors/tsconfig.spec.json",
+            "karmaConfig": "projects/interceptors/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/interceptors/tsconfig.lib.json",
+              "projects/interceptors/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }},
+  "defaultProject": "interceptors"
 }
