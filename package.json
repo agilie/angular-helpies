@@ -1,6 +1,6 @@
 {
   "name": "@agilie/angular-helpies",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,8 +8,6 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "coverage-report": "ng test --no-watch --code-coverage && bash <(curl -s https://codecov.io/bash) -t f27c863b-d1a1-4e34-a7cf-5c4559de19f3",
-    "publish": "npm publish --access public"
   },
   "dependencies": {
     "@angular/animations": "~8.2.14",
