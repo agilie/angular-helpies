@@ -9,10 +9,12 @@ export function Unsubscribable(options: UnsubscribeOptions = {exclude: []}): Cla
 
     constructor.prototype.ngOnDestroy = function() {
       for (const prop in this) {
-        const property = this[prop];
-        if (!options.exclude.includes(prop)) {
-          if (property && (typeof property.unsubscribe === 'function')) {
-            property.unsubscribe();
+        if (this.hasOwnProperty(prop)) {
+          const property = this[prop];
+          if (!options.exclude.includes(prop)) {
+            if (property && (typeof property.unsubscribe === 'function')) {
+              property.unsubscribe();
+            }
           }
         }
       }
