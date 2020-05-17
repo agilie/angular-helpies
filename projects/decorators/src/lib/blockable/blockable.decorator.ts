@@ -1,6 +1,9 @@
 import {Observable, Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
+/**
+ * TODO: This decorator should be revised I think
+ */
 export function Blockable(): MethodDecorator {
   return (target: object, key: string | symbol, descriptor: PropertyDescriptor): void => {
 
