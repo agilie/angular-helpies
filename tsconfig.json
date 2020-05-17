@@ -24,6 +24,12 @@
       ],
       "interceptors/*": [
         "dist/interceptors/*"
+      ],
+      "decorators": [
+        "dist/decorators"
+      ],
+      "decorators/*": [
+        "dist/decorators/*"
       ]
     }
   },
