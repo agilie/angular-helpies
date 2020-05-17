@@ -10,7 +10,9 @@ npm version $VERSION
 # Running tests and building the project
 ng lint
 ng test --no-watch --code-coverage
-ng build
+rm -rf dist
+ng build interceptors
+ng build decorators
 
 # Send coverage report to codecov for github badge
 curl -s https://codecov.io/bash | bash -s -- -t f27c863b-d1a1-4e34-a7cf-5c4559de19f3
