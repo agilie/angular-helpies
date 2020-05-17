@@ -11,7 +11,7 @@ const DEFAULT_CACHE_OPTIONS: CacheOptions = {
   lifetime: null
 };
 
-export function Cacheable(options: Partial<CacheOptions>): MethodDecorator {
+export function Cacheable(options?: Partial<CacheOptions>): MethodDecorator {
 
   let cachedValue: any;
   let funcType: FuncType;
@@ -21,9 +21,9 @@ export function Cacheable(options: Partial<CacheOptions>): MethodDecorator {
   return (target: object, key: string | symbol, descriptor: PropertyDescriptor): void => {
     const method = descriptor.value;
 
-    descriptor.value = (...args) => {
+    descriptor.value = function(...args) {
 
-      if (cachedValue) {
+      if (typeof cachedValue !== 'undefined') {
         switch (funcType) {
           case 'observable':
             return of(cachedValue);
