@@ -1,6 +1,7 @@
 {
   "name": "@agilie/angular-helpies",
-  "version": "0.2.3",
+  "version": "0.2.4",
+  "licence": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
