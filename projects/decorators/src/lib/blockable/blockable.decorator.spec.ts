@@ -1,8 +1,7 @@
 import {Observable, Subscription, timer} from 'rxjs';
 import {Blockable} from './blockable.decorator';
 import {map} from 'rxjs/operators';
-import {async} from '@angular/core/testing';
-
+import {waitForAsync} from '@angular/core/testing';
 class TestClass {
 
   @Blockable()
@@ -27,7 +26,7 @@ describe('blockable decorator', () => {
     testClass = new TestClass();
   });
 
-  it('should prevent Promise based function from calling twice', async(() => {
+  it('should prevent Promise based function from calling twice', waitForAsync(() => {
     const result1 = testClass.promise();
     const result2 = testClass.promise();
     expect(result1 instanceof Promise).toBeTruthy();
@@ -37,7 +36,7 @@ describe('blockable decorator', () => {
     });
   }));
 
-  it('should prevent Observable based function from calling twice', async(() => {
+  it('should prevent Observable based function from calling twice', waitForAsync(() => {
     const result1 = testClass.observable().subscribe(res => {
       expect(res).toBeTruthy();
     });

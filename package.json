@@ -11,25 +11,25 @@
     "e2e": "ng e2e"
   },
   "dependencies": {
-    "@angular/animations": "^17.2.0",
-    "@angular/common": "^17.2.0",
-    "@angular/compiler": "^17.2.0",
-    "@angular/core": "^17.2.0",
-    "@angular/forms": "^17.2.0",
-    "@angular/platform-browser": "^17.2.0",
-    "@angular/platform-browser-dynamic": "^17.2.0",
-    "@angular/router": "^17.2.0",
-    "dist": "^0.1.2",
-    "interceptors": "^1.0.2",
-    "rxjs": "^7.8.1",
+    "@angular/animations": "^19.2.21",
+    "@angular/common": "^19.2.21",
+    "@angular/compiler": "^19.2.21",
+    "@angular/core": "^19.2.21",
+    "@angular/forms": "^19.2.21",
+    "@angular/platform-browser": "^19.2.21",
+    "@angular/platform-browser-dynamic": "^19.2.21",
+    "@angular/router": "^19.2.21",
+    "protractor": "^7.0.0",
+    "rxjs": "^7.8.2",
     "tslib": "^2.6.2",
-    "zone.js": "~0.14.2"
+    "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.2.0",
-    "@angular/cli": "^17.2.0",
-    "@angular/compiler-cli": "^17.2.0",
-    "@angular/language-service": "^17.2.0",
+    "@types/jasmine": "^5.1.7",
+    "@angular-devkit/build-angular": "^19.2.25",
+    "@angular/cli": "^19.2.25",
+    "@angular/compiler-cli": "^19.2.21",
+    "@angular/language-service": "^19.2.21",
     "@types/node": "^18.18.6",
     "jasmine-core": "~4.6.0",
     "jasmine-spec-reporter": "~7.0.0",
@@ -38,8 +38,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "^2.0.0",
-    "ng-packagr": "^17.2.0",
+    "ng-packagr": "^19.2.2",
     "ts-node": "^10.9.2",
-    "typescript": "~5.3.3"
+    "typescript": "~5.5.4"
   }
 }
