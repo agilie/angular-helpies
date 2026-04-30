@@ -10,10 +10,10 @@ This repo is an **Angular CLI monorepo**. It builds **two separate npm packages*
 
 ## Packages
 
-| Package | npm name | Contents |
-|---------|----------|----------|
-| Interceptors | `@agilie/angular-helpies/interceptors` | `DuplicateRequestFilter` |
-| Decorators | `@agilie/angular-helpies/decorators` | `Blockable`, `Unsubscribable`, `Cacheable`, empty `DecoratorsModule` |
+| Package      | npm name                               | Contents                                                             |
+| ------------ | -------------------------------------- | -------------------------------------------------------------------- |
+| Interceptors | `@agilie/angular-helpies/interceptors` | `DuplicateRequestFilter`                                             |
+| Decorators   | `@agilie/angular-helpies/decorators`   | `Blockable`, `Unsubscribable`, `Cacheable`, empty `DecoratorsModule` |
 
 The root `package.json` name (`@agilie/angular-helpies`) is the **development workspace**; consumers usually install the subpackages from the table.
 
@@ -50,9 +50,9 @@ Same **method**, **URL including query**, **same body** → one network round tr
 #### Wiring (standalone, recommended)
 
 ```typescript
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { DuplicateRequestFilter } from '@agilie/angular-helpies/interceptors';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { DuplicateRequestFilter } from "@agilie/angular-helpies/interceptors";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -70,15 +70,12 @@ bootstrapApplication(AppComponent, {
 #### Wiring (`NgModule`)
 
 ```typescript
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { DuplicateRequestFilter } from '@agilie/angular-helpies/interceptors';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { DuplicateRequestFilter } from "@agilie/angular-helpies/interceptors";
 
 @NgModule({
   imports: [HttpClientModule],
-  providers: [
-    DuplicateRequestFilter,
-    { provide: HTTP_INTERCEPTORS, useClass: DuplicateRequestFilter, multi: true },
-  ],
+  providers: [DuplicateRequestFilter, { provide: HTTP_INTERCEPTORS, useClass: DuplicateRequestFilter, multi: true }],
 })
 export class AppModule {}
 ```
@@ -103,25 +100,25 @@ Blocks **re-entrancy** until the current invocation finishes. Typical cases: dou
 
 A `@Blockable()` method should return a **`Promise`**, **`Observable`**, or **`Subscription`**, or a synchronous value. While the first operation is running, **subsequent calls return `undefined` immediately** (the original method body does not run). After success or error the flag resets and the next call proceeds.
 
-| Return type | How the lock is released |
-|-------------|---------------------------|
-| `Promise` | `then` / `catch` of the first operation |
-| `Subscription` | callback from `subscription.add(...)` when the subscription ends |
-| `Observable` | see limitation below |
-| otherwise (sync) | immediately after one pass |
+| Return type      | How the lock is released                                         |
+| ---------------- | ---------------------------------------------------------------- |
+| `Promise`        | `then` / `catch` of the first operation                          |
+| `Subscription`   | callback from `subscription.add(...)` when the subscription ends |
+| `Observable`     | see limitation below                                             |
+| otherwise (sync) | immediately after one pass                                       |
 
 **`Observable` limitation:** the decorator’s `pipe(tap(...))` is **never subscribed**, so it is not wired into the returned stream. For cold observables, releasing the flag may be unreliable. Prefer returning a **`Promise`** (`firstValueFrom(...)`) or a **`Subscription`** until the implementation is fixed.
 
 #### Example: method on a **component** (common case)
 
 ```typescript
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
-import { Blockable } from '@agilie/angular-helpies/decorators';
+import { Component } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { firstValueFrom } from "rxjs";
+import { Blockable } from "@agilie/angular-helpies/decorators";
 
 @Component({
-  selector: 'app-checkout',
+  selector: "app-checkout",
   template: `<button type="button" (click)="onPay()">Pay</button>`,
   standalone: true,
 })
@@ -131,7 +128,7 @@ export class CheckoutComponent {
   /** Repeated calls until the request completes return `undefined`. */
   @Blockable()
   private submitOrder(): Promise<{ id: string }> {
-    return firstValueFrom(this.http.post<{ id: string }>('/api/orders', { items: [] }));
+    return firstValueFrom(this.http.post<{ id: string }>("/api/orders", { items: [] }));
   }
 
   onPay(): void {
@@ -139,9 +136,7 @@ export class CheckoutComponent {
     if (promise === undefined) {
       return;
     }
-    promise
-      .then((order) => console.log('order', order.id))
-      .catch((err) => console.error(err));
+    promise.then((order) => console.log("order", order.id)).catch((err) => console.error(err));
   }
 }
 ```
@@ -153,13 +148,13 @@ For standalone apps, remember `provideHttpClient()` (or `HttpClientModule` in an
 Useful when several places trigger the same action and you centralize logic in one service:
 
 ```typescript
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class CheckoutService {
   constructor(private http: HttpClient) {}
 
   @Blockable()
   submitOrder(body: { items: string[] }): Promise<{ id: string }> {
-    return firstValueFrom(this.http.post<{ id: string }>('/api/orders', body));
+    return firstValueFrom(this.http.post<{ id: string }>("/api/orders", body));
   }
 }
 ```
@@ -192,16 +187,16 @@ Empty `NgModule` with no declarations; exported for compatibility if you import 
 ### More decorator examples
 
 ```typescript
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { interval, Subscription } from 'rxjs';
-import { Unsubscribable } from '@agilie/angular-helpies/decorators';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { interval, Subscription } from "rxjs";
+import { Unsubscribable } from "@agilie/angular-helpies/decorators";
 
 @Component({
-  selector: 'app-example',
+  selector: "app-example",
   template: `...`,
   standalone: true,
 })
-@Unsubscribable({ exclude: ['keepAlive$'] })
+@Unsubscribable({ exclude: ["keepAlive$"] })
 export class ExampleComponent implements OnInit, OnDestroy {
   stream$!: Subscription;
   keepAlive$!: Subscription;
@@ -218,12 +213,12 @@ export class ExampleComponent implements OnInit, OnDestroy {
 ```
 
 ```typescript
-import { Cacheable } from '@agilie/angular-helpies/decorators';
+import { Cacheable } from "@agilie/angular-helpies/decorators";
 
 class Api {
   @Cacheable()
   load(): Promise<Data> {
-    return fetch('/api').then((r) => r.json());
+    return fetch("/api").then((r) => r.json());
   }
 }
 ```
@@ -257,11 +252,3 @@ Publishable artifacts live under `dist/interceptors` and `dist/decorators`. The 
 MIT (see `licence` / `license` in root and package `package.json` files).
 
 ---
-
-## Possible improvements
-
-- JSDoc / comments on the public API.
-- Implement or remove `lifetime` in `Cacheable`.
-- Fix the `Observable` branch in `Blockable` for predictable behavior.
-- Align subpackage `peerDependencies` with supported Angular versions.
-- Configure `compilationMode: partial` for publishable builds when needed.
