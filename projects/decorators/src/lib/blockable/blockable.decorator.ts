@@ -1,5 +1,5 @@
 import {Observable, Subscription} from 'rxjs';
-import {tap} from 'rxjs/operators';
+import {finalize} from 'rxjs/operators';
 
 /**
  * TODO: This decorator should be revised I think
@@ -19,13 +19,11 @@ export function Blockable(): MethodDecorator {
       const result = method.apply(this, args);
       switch (true) {
         case result instanceof Observable:
-          result.pipe(
-            tap(
-              () => isLoading = false,
-              () => isLoading = false
-            )
+          return result.pipe(
+            finalize(() => {
+              isLoading = false;
+            })
           );
-          break;
         case result instanceof Promise:
           result.then(
             () => isLoading = false,
