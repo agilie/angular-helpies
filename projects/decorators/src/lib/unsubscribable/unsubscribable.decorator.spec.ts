@@ -24,9 +24,8 @@ describe('unsubscribable decorator', () => {
 
   it('should call original ngOnDestroy hook if exists', () => {
     fixture.detectChanges();
-    spyOn(component, 'ngOnDestroy');
     fixture.destroy();
-    expect(component.ngOnDestroy).toHaveBeenCalled();
+    expect(component.userNgOnDestroyRan).toBe(true);
   });
 
   it('should leave excluded observables if any', () => {

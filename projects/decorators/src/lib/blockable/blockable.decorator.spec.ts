@@ -1,8 +1,7 @@
-import {Observable, Subscription, timer} from 'rxjs';
+import {NEVER, Observable, Subscription, throwError, timer} from 'rxjs';
 import {Blockable} from './blockable.decorator';
-import {map} from 'rxjs/operators';
-import {async} from '@angular/core/testing';
-
+import {map, switchMap} from 'rxjs/operators';
+import {fakeAsync, tick, waitForAsync} from '@angular/core/testing';
 class TestClass {
 
   @Blockable()
@@ -27,7 +26,7 @@ describe('blockable decorator', () => {
     testClass = new TestClass();
   });
 
-  it('should prevent Promise based function from calling twice', async(() => {
+  it('should prevent Promise based function from calling twice', waitForAsync(() => {
     const result1 = testClass.promise();
     const result2 = testClass.promise();
     expect(result1 instanceof Promise).toBeTruthy();
@@ -37,13 +36,67 @@ describe('blockable decorator', () => {
     });
   }));
 
-  it('should prevent Observable based function from calling twice', async(() => {
+  it('should prevent Observable based function from calling twice', waitForAsync(() => {
     const result1 = testClass.observable().subscribe(res => {
       expect(res).toBeTruthy();
     });
     const result2 = testClass.observable();
     expect(result1 instanceof Subscription).toBeTruthy();
     expect(result2).toBeUndefined();
+  }));
+
+  it('Observable should allow another call after stream completes', fakeAsync(() => {
+    class Ends {
+      @Blockable()
+      run() {
+        return timer(10).pipe(map(() => 'done'));
+      }
+    }
+
+    const t = new Ends();
+    const first = t.run();
+    expect(first).toBeTruthy();
+    first.subscribe();
+    expect(t.run()).toBeUndefined();
+    tick(10);
+    const after = t.run();
+    expect(after instanceof Observable).toBe(true);
+    after.subscribe();
+    tick(10);
+  }));
+
+  it('Observable should allow another call after unsubscribe', fakeAsync(() => {
+    class Hangs {
+      @Blockable()
+      run() {
+        return NEVER;
+      }
+    }
+
+    const t = new Hangs();
+    const sub = t.run().subscribe();
+    expect(t.run()).toBeUndefined();
+    sub.unsubscribe();
+    expect(t.run() instanceof Observable).toBe(true);
+  }));
+
+  it('Observable should allow another call after async error', fakeAsync(() => {
+    class Fails {
+      @Blockable()
+      run() {
+        return timer(10).pipe(
+          switchMap(() => throwError(() => new Error('x')))
+        );
+      }
+    }
+
+    const t = new Fails();
+    let sawError = false;
+    t.run().subscribe({error: () => (sawError = true)});
+    expect(t.run()).toBeUndefined();
+    tick(10);
+    expect(sawError).toBe(true);
+    expect(t.run()).toBeTruthy();
   }));
 
 });

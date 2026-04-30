@@ -1,5 +1,5 @@
 import {Cacheable} from './cacheable.decorator';
-import {async} from '@angular/core/testing';
+import {waitForAsync} from '@angular/core/testing';
 import {timer} from 'rxjs';
 import {map} from 'rxjs/operators';
 
@@ -37,7 +37,7 @@ describe('cacheable decorator', () => {
     testClass = new TestClass();
   });
 
-  it('should cache simple functions', async(() => {
+  it('should cache simple functions', waitForAsync(() => {
     spyOn(testClass, 'dataProvider').and.callThrough();
 
     const result1 = testClass.simpleValue();
@@ -50,7 +50,7 @@ describe('cacheable decorator', () => {
     expect(testClass.dataProvider).toHaveBeenCalledTimes(1);
   }));
 
-  it('should cache promise functions', async(() => {
+  it('should cache promise functions', waitForAsync(() => {
     spyOn(testClass, 'dataProvider').and.callThrough();
 
     testClass.observableValue().subscribe(result1 => {
